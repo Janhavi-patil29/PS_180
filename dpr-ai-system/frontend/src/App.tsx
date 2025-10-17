@@ -1,16 +1,14 @@
-import './App.css';
+import "./App.css";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import Home from "./components/Home";
 
 function App() {
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1>AI-Powered DPR Analysis Dashboard</h1>
-      </header>
-      <main className="main-content">
-        {/* Our dashboard page will go here later */}
-        <h2>Welcome to the Dashboard</h2>
-        <p>Project list will be displayed here.</p>
-      </main>
+    <div className="grid-container">
+      <Header />
+      <Sidebar />
+      <Home />
     </div>
   );
 }
