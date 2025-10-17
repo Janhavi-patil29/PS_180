@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the dependencies file and install them
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --timeout=100 --no-cache-dir -r requirements.txt
 
 # Copy the application code (from your 'src' folder)
 COPY ./src .
