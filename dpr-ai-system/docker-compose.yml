@@ -1,0 +1,61 @@
+services:
+  # PostgreSQL Database Service
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=dpr_ai_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  # User & Auth Backend Service
+  user-service:
+    build: ./user-service
+    restart: always
+    ports:
+      - "8001:80"
+    volumes:
+      - ./user-service/src:/app/src
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://myuser:mypassword@db/dpr_ai_db
+
+  # DPR Ingestion Backend Service
+  ingestion-service:
+    build: ./ingestion-service
+    restart: always
+    ports:
+      - "8002:80"
+    volumes:
+      - ./ingestion-service/src:/app/src
+    depends_on:
+      - db
+
+  # Project Metadata Backend Service
+  metadata-service:
+    build: ./metadata-service
+    restart: always
+    ports:
+      - "8003:80"
+    volumes:
+      - ./metadata-service/src:/app/src
+    depends_on:
+      - db
+
+  # React Frontend Service
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/src:/app/src
+
+# Named volume to persist database data
+volumes:
+  postgres_data:
