@@ -27,12 +27,12 @@ function Home() {
     { name: 'Jun', highRisk: 2, mediumRisk: 38, lowRisk: 25 },
   ];
 
-  // Define card data for easier mapping
+  // Define card data for easier mapping, including comparison text
   const cardData = [
-      { title: "TOTAL PROJECTS", value: 300, icon: <ArchiveIcon fontSize="large" />, color: "#2962ff" },
-      { title: "HIGH RISK", value: 12, icon: <DangerousIcon fontSize="large" />, color: "#d50000" },
-      { title: "MEDIUM RISK", value: 33, icon: <WarningAmberIcon fontSize="large" />, color: "#ff6d00" },
-      { title: "LOW RISK", value: 42, icon: <CheckCircleOutlineIcon fontSize="large" />, color: "#2e7d32" },
+      { title: "TOTAL PROJECTS", value: 300, icon: <ArchiveIcon fontSize="large" />, color: "#2962ff", comparison: "+5% than last month" },
+      { title: "HIGH RISK", value: 12, icon: <DangerousIcon fontSize="large" />, color: "#d50000", comparison: "-2% than last month" },
+      { title: "MEDIUM RISK", value: 33, icon: <WarningAmberIcon fontSize="large" />, color: "#ff6d00", comparison: "+8% than last month" },
+      { title: "LOW RISK", value: 42, icon: <CheckCircleOutlineIcon fontSize="large" />, color: "#2e7d32", comparison: "+1% than last month" },
   ];
 
   return (
@@ -44,18 +44,27 @@ function Home() {
         {/* Metric Cards Section using Grid */}
         <Grid container spacing={3} sx={{ mb: 4 }}> {/* Add margin-bottom */}
           {cardData.map((card, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}> {/* Responsive grid items */}
+            // Added component="div" to fix TypeScript error
+            <Grid component="div" item xs={12} sm={6} md={3} key={index}> {/* Responsive grid items */}
               <Card sx={{ backgroundColor: card.color, color: '#ffffff' }}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography sx={{ fontSize: 14, fontWeight: 'medium' }} gutterBottom>
-                      {card.title}
-                    </Typography>
+                  {/* Align items start to keep icon at the top */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <Box> {/* Wrap text elements */}
+                      <Typography sx={{ fontSize: 14, fontWeight: 'medium' }} gutterBottom>
+                        {card.title}
+                      </Typography>
+                      <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+                        {card.value}
+                      </Typography>
+                      {/* Add the comparison subtext here */}
+                      <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
+                        {card.comparison}
+                      </Typography>
+                    </Box>
+                    {/* Keep the icon */}
                     {card.icon}
                   </Box>
-                  <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
-                    {card.value}
-                  </Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -65,7 +74,8 @@ function Home() {
         {/* Charts Section using Grid */}
         <Grid container spacing={3} className="charts"> {/* Use className for height */}
           {/* Bar Chart */}
-          <Grid item xs={12} md={6}> {/* Takes full width on small, half on medium+ */}
+          {/* Added component="div" to fix TypeScript error */}
+          <Grid component="div" item xs={12} md={6}> {/* Takes full width on small, half on medium+ */}
             <Paper sx={{ p: 2, height: '100%' }}> {/* Paper provides background */}
               <Typography variant="h6" gutterBottom>Risk Distribution (Bar)</Typography>
               <ResponsiveContainer width="100%" height={250}> {/* Adjust height */}
@@ -86,7 +96,8 @@ function Home() {
           </Grid>
 
           {/* Line Chart */}
-          <Grid item xs={12} md={6}>
+          {/* Added component="div" to fix TypeScript error */}
+           <Grid component="div" item xs={12} md={6}>
              <Paper sx={{ p: 2, height: '100%' }}>
                <Typography variant="h6" gutterBottom>Risk Trends (Line)</Typography>
                <ResponsiveContainer width="100%" height={250}>
