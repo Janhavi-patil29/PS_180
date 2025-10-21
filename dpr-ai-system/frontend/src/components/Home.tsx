@@ -1,12 +1,23 @@
 import React from 'react';
-// Import icons
-import { BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill } from 'react-icons/bs';
+// Import MUI components for layout and cards
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper'; // Use Paper for chart backgrounds
+
+// Import MUI icons (replace old ones)
+import ArchiveIcon from '@mui/icons-material/Archive';
+import DangerousIcon from '@mui/icons-material/Dangerous'; // Example for High Risk
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'; // Example for Medium Risk
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // Example for Low Risk
+
 // Import charting components from recharts
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 function Home() {
-
-  // Placeholder data for the charts
+  // Placeholder data for the charts (same as before)
   const data = [
     { name: 'Jan', highRisk: 4, mediumRisk: 24, lowRisk: 24 },
     { name: 'Feb', highRisk: 3, mediumRisk: 13, lowRisk: 22 },
@@ -16,84 +27,88 @@ function Home() {
     { name: 'Jun', highRisk: 2, mediumRisk: 38, lowRisk: 25 },
   ];
 
+  // Define card data for easier mapping
+  const cardData = [
+      { title: "TOTAL PROJECTS", value: 300, icon: <ArchiveIcon fontSize="large" />, color: "#2962ff" },
+      { title: "HIGH RISK", value: 12, icon: <DangerousIcon fontSize="large" />, color: "#d50000" },
+      { title: "MEDIUM RISK", value: 33, icon: <WarningAmberIcon fontSize="large" />, color: "#ff6d00" },
+      { title: "LOW RISK", value: 42, icon: <CheckCircleOutlineIcon fontSize="large" />, color: "#2e7d32" },
+  ];
+
   return (
-    <main className='main-container'> {/* Main content area */}
-        <div className='main-title'>
-            <h3>DASHBOARD</h3>
-        </div>
+    <Box component="main" sx={{ flexGrow: 1 }}> {/* Use Box instead of <main> */}
+        <Typography variant="h5" gutterBottom component="div" sx={{ fontWeight: 'bold', mb: 3 }}>
+          DASHBOARD
+        </Typography>
 
-        {/* Metric Cards Section */}
-        <div className='main-cards'>
-            <div className='card'> {/* Card 1 */}
-                <div className='card-inner'>
-                    <h3>TOTAL PROJECTS</h3>
-                    <BsFillArchiveFill className='card_icon'/>
-                </div>
-                <h1>300</h1> {/* Placeholder number */}
-            </div>
-            <div className='card'> {/* Card 2 */}
-                <div className='card-inner'>
-                    <h3>HIGH RISK</h3>
-                    <BsFillGrid3X3GapFill className='card_icon'/>
-                </div>
-                <h1>12</h1> {/* Placeholder number */}
-            </div>
-            <div className='card'> {/* Card 3 */}
-                <div className='card-inner'>
-                    <h3>MEDIUM RISK</h3>
-                    <BsPeopleFill className='card_icon'/>
-                </div>
-                <h1>33</h1> {/* Placeholder number */}
-            </div>
-            <div className='card'> {/* Card 4 */}
-                <div className='card-inner'>
-                    <h3>LOW RISK</h3>
-                    <BsFillBellFill className='card_icon'/>
-                </div>
-                <h1>42</h1> {/* Placeholder number */}
-            </div>
-        </div>
+        {/* Metric Cards Section using Grid */}
+        <Grid container spacing={3} sx={{ mb: 4 }}> {/* Add margin-bottom */}
+          {cardData.map((card, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}> {/* Responsive grid items */}
+              <Card sx={{ backgroundColor: card.color, color: '#ffffff' }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography sx={{ fontSize: 14, fontWeight: 'medium' }} gutterBottom>
+                      {card.title}
+                    </Typography>
+                    {card.icon}
+                  </Box>
+                  <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+                    {card.value}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
-        {/* Charts Section */}
-        <div className='charts'>
-            {/* Bar Chart */}
-            <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-                width={500}
-                height={300}
-                data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="highRisk" fill="#8884d8" />
-                <Bar dataKey="mediumRisk" fill="#82ca9d" />
-            </BarChart>
-            </ResponsiveContainer>
-
-            {/* Line Chart */}
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                    width={500}
-                    height={300}
+        {/* Charts Section using Grid */}
+        <Grid container spacing={3} className="charts"> {/* Use className for height */}
+          {/* Bar Chart */}
+          <Grid item xs={12} md={6}> {/* Takes full width on small, half on medium+ */}
+            <Paper sx={{ p: 2, height: '100%' }}> {/* Paper provides background */}
+              <Typography variant="h6" gutterBottom>Risk Distribution (Bar)</Typography>
+              <ResponsiveContainer width="100%" height={250}> {/* Adjust height */}
+                <BarChart
                     data={data}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    margin={{ top: 5, right: 10, left: -10, bottom: 5 }} // Adjust margins
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/> {/* Lighter grid */}
+                    <XAxis dataKey="name" stroke="#555"/>
+                    <YAxis stroke="#555"/>
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="highRisk" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="mediumRisk" stroke="#82ca9d" />
+                    <Bar dataKey="highRisk" fill="#d50000" name="High Risk"/>
+                    <Bar dataKey="mediumRisk" fill="#ff6d00" name="Medium Risk"/>
+                </BarChart>
+              </ResponsiveContainer>
+            </Paper>
+          </Grid>
+
+          {/* Line Chart */}
+          <Grid item xs={12} md={6}>
+             <Paper sx={{ p: 2, height: '100%' }}>
+               <Typography variant="h6" gutterBottom>Risk Trends (Line)</Typography>
+               <ResponsiveContainer width="100%" height={250}>
+                <LineChart
+                    data={data}
+                    margin={{ top: 5, right: 10, left: -10, bottom: 5 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
+                    <XAxis dataKey="name" stroke="#555"/>
+                    <YAxis stroke="#555"/>
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="highRisk" stroke="#d50000" name="High Risk" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="mediumRisk" stroke="#ff6d00" name="Medium Risk"/>
+                    <Line type="monotone" dataKey="lowRisk" stroke="#2e7d32" name="Low Risk"/>
                 </LineChart>
-            </ResponsiveContainer>
-        </div>
-    </main>
-  )
+               </ResponsiveContainer>
+             </Paper>
+          </Grid>
+        </Grid>
+    </Box>
+  );
 }
 
 export default Home;
