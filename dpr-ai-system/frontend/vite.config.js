@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true, // This ensures it listens on all network interfaces
-    hmr: {
+    /*hmr: {
       // Necessary for HMR through ngrok/tunnels
       clientPort: 443 // Assuming ngrok uses standard HTTPS port
     },
-    // --- Add this section ---
+    // --- Add this section ---*/
     allowedHosts: [
       'yee-preperusal-certainly.ngrok-free.dev', // Allow any ngrok free domain
       // Or be more specific: 'yee-preperusal-certainly.ngrok-free.app'
