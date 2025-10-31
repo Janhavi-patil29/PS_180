@@ -1,10 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx' // Ensure this line imports App.tsx
-import './index.css' // Optional default styles, can be removed if unused
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App"; // <-- Removed .tsx extension
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App /> {/* Ensure this line renders the App component */}
-  </React.StrictMode>,
-)
+// Find the root element from index.html
+const rootElement = document.getElementById("root");
+
+// Ensure the root element exists before trying to render
+if (rootElement) {
+  // Create a React root and render the App component
+  createRoot(rootElement).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+} else {
+  // Log an error if the root element is missing
+  console.error("Failed to find the root element with ID 'root'. React app cannot mount.");
+}

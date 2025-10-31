@@ -1,115 +1,46 @@
-import React from 'react';
-// Import NavLink instead of Link for active state styling
-import { NavLink } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { Link, useLocation } from "react-router-dom";
+import { Home, FolderOpen, Upload, Users, Settings, Database, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Import MUI icons (same as before)
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import FolderIcon from '@mui/icons-material/Folder';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import PeopleIcon from '@mui/icons-material/People';
-import SettingsIcon from '@mui/icons-material/Settings';
-import StorageIcon from '@mui/icons-material/Storage';
+const menuItems = [
+  { icon: Home, label: "Dashboard", path: "/" },
+  { icon: FolderOpen, label: "Projects", path: "/projects" },
+  { icon: Upload, label: "Upload DPR", path: "/upload" },
+  { icon: Users, label: "Users", path: "/users" },
+  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: HelpCircle, label: "Help & Support", path: "/help" },
+];
 
-interface SidebarProps {
-  drawerWidth: number;
-}
-
-function Sidebar({ drawerWidth }: SidebarProps) {
-
-  // Define style for active NavLink
-  const activeStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)', // Example active background
-    color: '#fff', // Example active text color
-    fontWeight: 'bold',
-  };
-
-  // Define the content of the drawer
-  const drawerContent = (
-    <div>
-      <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#263043', color: '#fff' }}>
-         <StorageIcon sx={{ mr: 1, fontSize: '2rem' }} />
-         <Typography variant="h6" noWrap component="div">
-            DPR AI System
-         </Typography>
-      </Toolbar>
-      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }}/> {/* Added Divider styling */}
-      <List>
-        {/* Navigation items using NavLink */}
-        {[
-          { text: 'Dashboard', icon: <DashboardIcon sx={{ color: '#9e9ea4' }} />, path: '/' },
-          { text: 'Projects', icon: <FolderIcon sx={{ color: '#9e9ea4' }} />, path: '/projects' }, // Update path later
-          { text: 'Upload DPR', icon: <UploadFileIcon sx={{ color: '#9e9ea4' }} />, path: '/upload' },
-          { text: 'Users', icon: <PeopleIcon sx={{ color: '#9e9ea4' }} />, path: '/users' },       // Update path later
-          { text: 'Settings', icon: <SettingsIcon sx={{ color: '#9e9ea4' }} />, path: '/settings' },   // Update path later
-        ].map((item) => (
-          <ListItem key={item.text} disablePadding>
-            {/* Use NavLink with the style prop */}
-            <ListItemButton
-              component={NavLink}
-              to={item.path}
-              style={({ isActive }) => ({ // Style prop receives isActive status
-                ...(isActive ? activeStyle : {}), // Apply activeStyle if isActive is true
-                textDecoration: 'none', // Remove underline from link
-                color: '#9e9ea4', // Default text color
-              })}
-              sx={{ // MUI sx prop for hover effects etc.
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                },
-              }}
-            >
-              <ListItemIcon sx={{ minWidth: 40 }}> {/* Adjust icon spacing */}
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+export const Sidebar = () => {
+  const location = useLocation();
 
   return (
-    <Box
-      component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      aria-label="mailbox folders"
-    >
-      {/* Temporary Drawer for mobile (unchanged) */}
-      <Drawer
-        variant="temporary"
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#263043' },
-        }}
-      >
-        {drawerContent}
-      </Drawer>
-
-      {/* Permanent Drawer for desktop (unchanged) */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#263043' },
-        }}
-        open
-      >
-        {drawerContent}
-      </Drawer>
-    </Box>
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar-background border-r border-sidebar-border hidden md:block z-20">
+      <div className="flex items-center justify-center h-16 border-b border-sidebar-border bg-sidebar-background/50 backdrop-blur-sm">
+        <Database className="w-8 h-8 text-primary mr-2" />
+        <h1 className="text-xl font-bold text-sidebar-foreground">DPR AI System</h1>
+      </div>
+      <nav className="p-4 space-y-2">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={cn(
+                "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
+                isActive
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium shadow-lg"
+                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              )}
+            >
+              <Icon className="w-5 h-5" />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </aside>
   );
-}
-
-export default Sidebar;
+};

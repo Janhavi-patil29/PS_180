@@ -1,151 +1,85 @@
-import React, { useState } from 'react'; // Import useState
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import Badge from '@mui/material/Badge';
-import Menu from '@mui/material/Menu'; // Import Menu
-import MenuItem from '@mui/material/MenuItem'; // Import MenuItem
+import { Search, Bell, Mail, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
-// Import MUI icons
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MailIcon from '@mui/icons-material/Mail';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-
-interface HeaderProps {
-  drawerWidth: number;
-}
-
-function Header({ drawerWidth }: HeaderProps) {
-  // State for anchoring the account menu
-  const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
-  const isAccountMenuOpen = Boolean(anchorElAccount);
-
-  // State for anchoring the mail menu
-  const [anchorElMail, setAnchorElMail] = useState<null | HTMLElement>(null);
-  const isMailMenuOpen = Boolean(anchorElMail);
-
-  // Handlers for Account Menu
-  const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElAccount(event.currentTarget);
-  };
-  const handleAccountMenuClose = () => {
-    setAnchorElAccount(null);
-  };
-
-  // Handlers for Mail Menu
-  const handleMailMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElMail(event.currentTarget);
-  };
-  const handleMailMenuClose = () => {
-    setAnchorElMail(null);
-  };
-
-  // Menu IDs (useful for accessibility)
-  const accountMenuId = 'primary-account-menu';
-  const mailMenuId = 'primary-mail-menu';
-
+export const Header = () => {
   return (
-    <AppBar
-      position="fixed"
-      sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        ml: { sm: `${drawerWidth}px` },
-        backgroundColor: '#ffffff',
-        color: '#333'
-      }}
-    >
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          sx={{ mr: 2, display: { sm: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
+    <header className="fixed top-0 right-0 left-0 md:left-64 h-16 bg-card/80 backdrop-blur-lg border-b border-border z-10">
+      <div className="h-full px-6 flex items-center justify-between">
+        <div className="flex items-center flex-1 max-w-xl">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="pl-10 bg-secondary/50 border-none"
+            />
+          </div>
+        </div>
 
-        <Box sx={{ flexGrow: 1 }} >
-           <IconButton color="inherit">
-             <SearchIcon />
-           </IconButton>
-        </Box>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Mail className="w-5 h-5" />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-primary text-xs">
+                  3
+                </Badge>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuLabel>Messages</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>New project assigned</DropdownMenuItem>
+              <DropdownMenuItem>DPR review completed</DropdownMenuItem>
+              <DropdownMenuItem>Risk level updated</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          {/* Mail Icon Button */}
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            aria-controls={mailMenuId} // Link button to menu
-            aria-haspopup="true"
-            onClick={handleMailMenuOpen} // Open mail menu on click
-            color="inherit"
-          >
-            <Badge badgeContent={4} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="w-5 h-5" />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-destructive text-xs">
+                  5
+                </Badge>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>High risk project detected</DropdownMenuItem>
+              <DropdownMenuItem>Weekly report available</DropdownMenuItem>
+              <DropdownMenuItem>System update required</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          {/* Notifications Icon Button (no dropdown for now) */}
-          <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-
-          {/* Account Icon Button */}
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={accountMenuId} // Link button to menu
-            aria-haspopup="true"
-            onClick={handleAccountMenuOpen} // Open account menu on click
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-        </Box>
-      </Toolbar>
-
-      {/* Mail Dropdown Menu */}
-      <Menu
-        anchorEl={anchorElMail}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        id={mailMenuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMailMenuOpen}
-        onClose={handleMailMenuClose}
-      >
-        {/* Add actual mail items later */}
-        <MenuItem onClick={handleMailMenuClose}>Mail Item 1</MenuItem>
-        <MenuItem onClick={handleMailMenuClose}>Mail Item 2</MenuItem>
-      </Menu>
-
-      {/* Account Dropdown Menu */}
-      <Menu
-        anchorEl={anchorElAccount}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} // Position menu below icon
-        id={accountMenuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }} // Animation origin
-        open={isAccountMenuOpen}
-        onClose={handleAccountMenuClose} // Close menu when clicking away
-      >
-        <MenuItem onClick={handleAccountMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleAccountMenuClose}>My account</MenuItem>
-        <MenuItem onClick={handleAccountMenuClose}>Logout</MenuItem>
-      </Menu>
-
-    </AppBar>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <User className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
   );
-}
-
-export default Header;
+};

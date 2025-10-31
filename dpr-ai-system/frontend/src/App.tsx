@@ -1,61 +1,38 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
+import Upload from "./pages/Upload";
+import Users from "./pages/Users";
+import Settings from "./pages/Settings";
+import Help from "./pages/Help";
+import NotFound from "./pages/NotFound";
+import { DashboardLayout } from "./components/DashboardLayout";
 
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import Home from './components/Home';
-import Upload from './components/Upload';
+const queryClient = new QueryClient();
 
-const drawerWidth = 240;
-
-function App() {
-  return (
-    <Router>
-      <Box sx={{
-        display: 'flex',
-        minHeight: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'url(/mountain-bg.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(4px)',
-          opacity: 0.3,
-          zIndex: -2,
-        }
-       }}>
-        <CssBaseline />
-        <Header drawerWidth={drawerWidth} />
-        <Sidebar drawerWidth={drawerWidth} />
-
-        {/* --- Main Content Box --- */}
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3, // Padding
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            marginTop: '64px', // Offset below AppBar
-            backgroundColor: 'rgba(112, 124, 143, 0.6)', // Subtle dark background overlay
-            borderRadius: { sm: '8px 0 0 0' } // Optional rounded corner
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/upload" element={<Upload />} />
-          </Routes>
-        </Box>
-        {/* --- END Main Content Box --- */}
-
-      </Box>
-    </Router>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+          <Route path="/projects" element={<DashboardLayout><Projects /></DashboardLayout>} />
+          <Route path="/upload" element={<DashboardLayout><Upload /></DashboardLayout>} />
+          <Route path="/users" element={<DashboardLayout><Users /></DashboardLayout>} />
+          <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+          <Route path="/help" element={<DashboardLayout><Help /></DashboardLayout>} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;
