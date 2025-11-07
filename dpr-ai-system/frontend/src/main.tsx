@@ -1,20 +1,19 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App"; // <-- Removed .tsx extension
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+import { AuthProvider } from './context/AuthContext'; // <-- 1. Import AuthProvider
 
-// Find the root element from index.html
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 
-// Ensure the root element exists before trying to render
 if (rootElement) {
-  // Create a React root and render the App component
-  createRoot(rootElement).render(
+  ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <App />
-    </React.StrictMode>
+      <AuthProvider> {/* <-- 2. Wrap the App component */}
+        <App />
+      </AuthProvider>
+    </React.StrictMode>,
   );
 } else {
-  // Log an error if the root element is missing
-  console.error("Failed to find the root element with ID 'root'. React app cannot mount.");
+  console.error("Fatal Error: The root element with ID 'root' was not found in index.html. React cannot mount the application.");
 }
