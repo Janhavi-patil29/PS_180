@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { Search, Bell, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export const Header = () => {
+  const { logout } = useAuth();
   return (
     <header className="fixed top-0 right-0 left-0 md:left-64 h-16 bg-card/80 backdrop-blur-lg border-b border-border z-10">
       <div className="h-full px-6 flex items-center justify-between">
@@ -69,14 +71,15 @@ export const Header = () => {
                 <User className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
+{/* Account Dropdown Menu */}
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem> {/* <-- Updated onClick */}
+      </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
