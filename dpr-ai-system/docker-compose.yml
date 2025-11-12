@@ -19,7 +19,7 @@ services:
     ports:
       - "8001:80"
     volumes:
-      - ./user-service/src:/app/src
+      - ./user-service/src:/app
     depends_on:
       - db
     environment:
@@ -32,7 +32,7 @@ services:
     ports:
       - "8002:80"
     volumes:
-      - ./ingestion-service/src:/app/src
+      - ./ingestion-service/src:/app
     depends_on:
       - db
 
@@ -43,7 +43,7 @@ services:
     ports:
       - "8003:80"
     volumes:
-      - ./metadata-service/src:/app/src
+      - ./metadata-service/src:/app
     depends_on:
       - db
 
